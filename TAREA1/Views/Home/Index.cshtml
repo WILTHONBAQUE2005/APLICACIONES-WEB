@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="hero-wrap">
+    <div class="container py-5">
+        <div class="hero-card">
+            <div class="hero-header">
+                <div>
+                    <h1 class="hero-title">BAQUE MOREIRA WILTHON SLAYTER</h1>
+                    <p class="hero-subtitle">Web personal en ASP.NET Core MVC (.NET 8) con HTML y CSS.</p>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-2">
+                <div class="col-lg-5">
+                    <article class="panel h-100">
+                        <h2 class="panel-title">Sobre mí</h2>
+                        <p class="panel-text">
+                            Hola, mi nombre es <strong>Baque Moreira Wilthon Slayter</strong> y tengo <strong>20 años</strong>. Nací el <strong>01 de julio de 2005</strong> en la ciudad de <strong>Santo Domingo</strong>. Actualmente vivo en <strong>La Concordia</strong>, estudio <strong>Ingeniería de Software</strong> y me encuentro en <strong>sexto semestre</strong>. Me encanta aprender, enfrentar dificultades, autoeducarme, vivir la vida, viajar y trabajar. Desde pequeño se me ha inculcado la importancia de salir adelante por mis propios medios, sin depender de la estabilidad económica de mis padres. Me siento feliz con mi vida y con el esfuerzo que estoy haciendo para progresar.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="col-lg-3">
+                    <article class="panel h-100">
+                        <h2 class="panel-title">Habilidades</h2>
+                        <ul class="skill-list">
+                            <li><span class="dot"></span>HTML5 / CSS3</li>
+                            <li><span class="dot"></span>ASP.NET Core MVC (.NET 8)</li>
+                            <li><span class="dot"></span>PHP básico</li>
+                            <li><span class="dot"></span>MariaDB (XAMPP)</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="col-lg-4">
+                    <article class="panel h-100">
+                        <h2 class="panel-title">Calculadora</h2>
+                        <p class="panel-text">
+                            Incluye una calculadora hecha en PHP y embebida dentro de esta web.
+                        </p>
+
+                        <a class="btn-primary-soft" asp-controller="Home" asp-action="Calculadora">
+                            Abrir calculadora
+                        </a>
+
+                        <div class="mini-note">
+                            Ejecuta PHP en <code>localhost:8001</code> para que se cargue aquí.
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
