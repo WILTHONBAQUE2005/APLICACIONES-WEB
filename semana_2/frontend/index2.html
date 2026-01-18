@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clientes (solo lectura)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Clientes (solo lectura)</h1>
+    <p class="muted">Ejemplo simple de GET a la API.</p>
+
+    <section class="card">
+      <button id="btn" class="secondary">Cargar</button>
+      <pre id="out" class="msg" style="white-space: pre-wrap;"></pre>
+    </section>
+  </main>
+
+  <script>
+    const btn = document.getElementById('btn');
+    const out = document.getElementById('out');
+    const url = '../backend/controllers/cliente.controller.php';
+
+    btn.addEventListener('click', async () => {
+      out.textContent = 'Cargando...';
+      const res = await fetch(url);
+      const json = await res.json();
+      out.textContent = JSON.stringify(json, null, 2);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Clientes</title>
+  <link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <h1>Clientes</h1>
+      </div>
+
+      <div class="topbar-actions">
+        <button id="btnNew" class="btn btn-primary" type="button">Nuevo cliente</button>
+        <button id="btnRefresh" class="btn btn-secondary" type="button">Refrescar</button>
+      </div>
+    </header>
+
+    <main class="grid-one">
+      <section class="card">
+        <div class="card-head row">
+          <div>
+            <h2>Listado</h2>
+            <p class="muted">Gestiona clientes: crear, editar y eliminar con confirmación.</p>
+          </div>
+          <div class="search">
+            <input id="search" type="search" placeholder="Buscar por cédula, nombre, email..." />
+          </div>
+        </div>
+
+        <div class="table-wrap">
+  <div id="emptyState" class="empty" hidden>
+    <div class="empty-illus" aria-hidden="true">
+      <svg viewBox="0 0 120 120" fill="none">
+        <path d="M20 44c0-10 8-18 18-18h44c10 0 18 8 18 18v36c0 10-8 18-18 18H38c-10 0-18-8-18-18V44Z" opacity=".18"/>
+        <path d="M34 54h52M34 66h36M34 78h44" stroke="currentColor" stroke-width="6" stroke-linecap="round" opacity=".35"/>
+        <circle cx="88" cy="78" r="12" opacity=".25"/>
+      </svg>
+    </div>
+    <div class="empty-text">
+      <h3 id="emptyTitle">Sin clientes registrados</h3>
+<p class="muted" id="emptyDesc">Cuando crees un cliente, aparecerá aquí en el listado.</p>
+<button id="btnEmptyNew" class="btn btn-primary" type="button">Nuevo cliente</button>
+
+    </div>
+  </div>
+
+  <table class="table" id="clientesTable" aria-label="Tabla de clientes">
+
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>CÉDULA</th>
+                <th>NOMBRES</th>
+                <th>APELLIDOS</th>
+                <th>EMAIL</th>
+                <th>PAÍS</th>
+                <th>TELÉFONO</th>
+                <th class="right">ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal formulario (Nuevo / Editar) -->
+  <div class="modal" id="formModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-form></div>
+
+    <div class="modal-card modal-card-lg" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="formTitle">Registrar cliente</h3>
+          <p class="muted" id="formHint">Todos los campos son obligatorios.</p>
+        </div>
+        <button class="iconbtn" type="button" title="Cerrar" data-close-form aria-label="Cerrar">
+          ✕
+        </button>
+      </div>
+
+      <form id="clienteForm" novalidate>
+        <input type="hidden" id="clienteId"/>
+
+        <div class="form-grid form-grid-1">
+          <div class="field">
+            <label for="cedula">Cédula / Documento</label>
+            <input id="cedula" name="cedula" type="text" inputmode="numeric" autocomplete="off" required
+                   placeholder="Ej.: 1723456789"/>
+            <small class="help" id="cedulaHelp">Ecuador: 10 dígitos válidos. Otros países: 6–20 dígitos.</small>
+          </div>
+
+          <div class="two-col">
+            <div class="field">
+              <label for="nombres">Nombres</label>
+              <input id="nombres" name="nombres" type="text" required maxlength="80" placeholder="Ej.: Juan Carlos"/>
+            </div>
+
+            <div class="field">
+              <label for="apellidos">Apellidos</label>
+              <input id="apellidos" name="apellidos" type="text" required maxlength="80" placeholder="Ej.: Moreira Baque"/>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required maxlength="120" placeholder="Ej.: correo@dominio.com"/>
+          </div>
+
+          <div class="two-col">
+            <div class="field">
+              <label for="paisIso">País</label>
+              <select id="paisIso" name="pais_iso" required>
+                <option value="EC">Ecuador</option>
+                <option value="CO">Colombia</option>
+                <option value="PE">Perú</option>
+                <option value="VE">Venezuela</option>
+                <option value="US">Estados Unidos</option>
+                <option value="ES">España</option>
+              </select>
+              <small class="help">El prefijo se asigna automáticamente.</small>
+            </div>
+
+            <div class="field">
+              <label>Teléfono</label>
+              <div class="phone-row">
+                <input id="telefonoPrefix" type="text" readonly aria-label="Prefijo"/>
+                <input id="telefonoLocal" name="telefono_local" type="text" inputmode="numeric" required
+                       placeholder="Ej.: 9 8765 4321" autocomplete="off"/>
+              </div>
+              <small class="help" id="phoneHelp">
+                Ejemplo: <span class="mono" id="phoneExample">+593 9 8765 4321</span>
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions actions-right">
+          <button class="btn btn-ghost" id="btnCancel" type="button">Cancelar</button>
+          <button class="btn btn-primary" id="btnSubmit" type="submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal eliminar -->
+  <div class="modal" id="deleteModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+      <h3 id="deleteTitle">Confirmar eliminación</h3>
+      <p class="muted" id="deleteText"></p>
+
+      <div class="danger-box">
+        <p><strong>Para confirmar</strong>, escribe <span class="mono">ELIMINAR</span>:</p>
+        <input id="deleteConfirm" type="text" placeholder="ELIMINAR" autocomplete="off"/>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-ghost" type="button" data-close>Cancelar</button>
+        <button class="btn btn-danger" id="btnDeleteConfirm" type="button" disabled>Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="./home.js"></script>
+</body>
+</html>

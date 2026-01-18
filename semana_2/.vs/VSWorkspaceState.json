@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\config",
+    "\\backend\\controllers",
+    "\\backend\\models",
+    "\\database",
+    "\\frontend"
+  ],
+  "PreviewInSolutionExplorer": false
+}
