@@ -1,0 +1,45 @@
+
+:root{
+  --app-bg: #f4f6f9;
+  --nav: #0f172a;
+}
+
+.app-bg{
+  background: var(--app-bg);
+}
+
+.app-nav{
+  background: linear-gradient(135deg, var(--nav), #1f2937);
+}
+
+.table td, .table th{
+  vertical-align: middle;
+}
+
+.dataTables_wrapper .dataTables_filter input{
+  border-radius: 0.5rem;
+}
+
+.dataTables_wrapper .dataTables_length select{
+  border-radius: 0.5rem;
+}
+
+.badge{
+  font-weight: 600;
+}
+
+.btn{
+  border-radius: 0.6rem;
+}
+
+.card{
+  border-radius: 1rem;
+}
+
+.modal-content{
+  border-radius: 1rem;
+}
+
+
+
+#tablaClientes td, #tablaClientes th { white-space: nowrap; }
