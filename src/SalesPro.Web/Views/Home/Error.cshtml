@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Error";
+    ViewData["Header"] = "Error";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="mb-2">Ocurrió un problema</h4>
+        <div class="text-muted">Vuelve a intentarlo. Si el problema persiste, revisa la conexión a la base de datos.</div>
+        <div class="mt-3">
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Volver</a>
+        </div>
+    </div>
+</div>

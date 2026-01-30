@@ -1,0 +1,25 @@
+@model SalesPro.Domain.Entities.Product
+
+@{
+    ViewData["Title"] = "Eliminar producto";
+    ViewData["Header"] = "Eliminar producto";
+}
+
+<div class="card border-danger">
+    <div class="card-body">
+        <h4 class="text-danger mb-2">Confirmar eliminación</h4>
+        <div class="text-muted">Esta acción no se puede deshacer.</div>
+
+        <div class="mt-3">
+            <div><span class="text-muted">Código:</span> <span class="fw-semibold">@Model.Code</span></div>
+            <div><span class="text-muted">Nombre:</span> <span class="fw-semibold">@Model.Name</span></div>
+        </div>
+
+        <form class="mt-4 d-flex gap-2" method="post" asp-action="DeleteConfirmed">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.ProductId" />
+            <button class="btn btn-danger" type="submit"><i class="bi bi-trash me-2"></i>Eliminar</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+        </form>
+    </div>
+</div>

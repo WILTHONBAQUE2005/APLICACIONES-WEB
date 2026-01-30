@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Header"] = "Dashboard";
+    var products = (int)ViewBag.Products;
+    var customers = (int)ViewBag.Customers;
+    var sales = (int)ViewBag.Sales;
+    var totalSales = (decimal)ViewBag.TotalSales;
+}
+
+<div class="row g-3">
+    <div class="col-12 col-md-3">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-icon"><i class="bi bi-box-seam"></i></div>
+                <div class="kpi-label">Productos</div>
+                <div class="kpi-value">@products</div>
+                <a class="stretched-link" asp-controller="Products" asp-action="Index"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-icon"><i class="bi bi-people"></i></div>
+                <div class="kpi-label">Clientes</div>
+                <div class="kpi-value">@customers</div>
+                <a class="stretched-link" asp-controller="Customers" asp-action="Index"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-icon"><i class="bi bi-receipt"></i></div>
+                <div class="kpi-label">Ventas</div>
+                <div class="kpi-value">@sales</div>
+                <a class="stretched-link" asp-controller="Sales" asp-action="Index"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-icon"><i class="bi bi-cash-coin"></i></div>
+                <div class="kpi-label">Total vendido</div>
+                <div class="kpi-value">@totalSales.ToString("C")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="col-12 col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h5 class="mb-1">Acciones rápidas</h5>
+                        <div class="text-muted">Operaciones frecuentes del sistema</div>
+                    </div>
+                    <i class="bi bi-lightning-charge fs-3 text-muted"></i>
+                </div>
+
+                <div class="row g-2 mt-3">
+                    <div class="col-12 col-md-4">
+                        <a class="btn btn-primary w-100" asp-controller="Sales" asp-action="Create">
+                            <i class="bi bi-plus-circle me-2"></i>Nueva venta
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <a class="btn btn-outline-primary w-100" asp-controller="Products" asp-action="Create">
+                            <i class="bi bi-box-arrow-in-down me-2"></i>Nuevo producto
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <a class="btn btn-outline-primary w-100" asp-controller="Customers" asp-action="Create">
+                            <i class="bi bi-person-plus me-2"></i>Nuevo cliente
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+</div>
+</div>

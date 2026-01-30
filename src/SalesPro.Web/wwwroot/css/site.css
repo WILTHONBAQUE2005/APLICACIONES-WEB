@@ -1,0 +1,160 @@
+:root{
+  --sidebar-w: 260px;
+}
+
+html, body{
+  height:100%;
+}
+
+body{
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.app-body{
+  background: #f6f8fb;
+}
+
+.app-shell{
+  display:flex;
+  min-height:100vh;
+}
+
+.app-sidebar{
+  width:var(--sidebar-w);
+  background:#0b2340;
+  color:#fff;
+  position:sticky;
+  top:0;
+  height:100vh;
+  padding:18px 14px;
+  display:flex;
+  flex-direction:column;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:6px 8px 12px 8px;
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  letter-spacing:0.5px;
+}
+
+.brand-title{
+  font-weight:700;
+  line-height:1.1;
+}
+
+.brand-sub{
+  font-size:12px;
+  opacity:0.8;
+}
+
+.app-sidebar .nav-link{
+  color:rgba(255,255,255,0.82);
+  border-radius:12px;
+  padding:10px 12px;
+  margin:2px 0;
+}
+
+.app-sidebar .nav-link:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.10);
+}
+
+.app-sidebar .nav-link.active{
+  color:#0b2340;
+  background:#fff;
+  font-weight:600;
+}
+
+.sidebar-footer{
+  margin-top:auto;
+  padding:10px 10px 4px 10px;
+  opacity:0.8;
+}
+
+.app-main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+.app-topbar{
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  background:#fff;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+
+.topbar-title{
+  font-weight:700;
+  font-size:18px;
+}
+
+.app-content{
+  padding:22px;
+}
+
+.kpi-card{
+  border:0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  border-radius:16px;
+}
+
+.kpi-icon{
+  width:38px;
+  height:38px;
+  border-radius:14px;
+  background:rgba(13,110,253,0.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#0d6efd;
+  font-size:18px;
+}
+
+.kpi-label{
+  margin-top:10px;
+  font-size:13px;
+  color:#6c757d;
+}
+
+.kpi-value{
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-0.02em;
+}
+
+.card{
+  border-radius:16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border:1px solid rgba(0,0,0,0.06);
+}
+
+.table thead th{
+  font-size:12px;
+  letter-spacing:0.03em;
+  text-transform:uppercase;
+}
+
+.btn, .form-control, .input-group-text{
+  border-radius:12px;
+}
+
+.alert{
+  border-radius:16px;
+}

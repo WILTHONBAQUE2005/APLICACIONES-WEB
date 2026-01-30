@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+<body class="app-body">
+    <div class="app-shell">
+        <aside class="app-sidebar">
+            <div class="brand">
+                <div class="brand-mark">V</div>
+                <div class="brand-text">
+                    <div class="brand-title">Ventas</div>
+                    <div class="brand-sub">Gestión</div>
+                </div>
+            </div>
+
+            <nav class="nav flex-column mt-2">
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Sales" ? "active" : "")" asp-controller="Sales" asp-action="Index">
+                    <i class="bi bi-receipt me-2"></i>Ventas
+                </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Products" ? "active" : "")" asp-controller="Products" asp-action="Index">
+                    <i class="bi bi-box-seam me-2"></i>Productos
+                </a>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Customers" ? "active" : "")" asp-controller="Customers" asp-action="Index">
+                    <i class="bi bi-people me-2"></i>Clientes
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="small text-muted">v1.0</div>
+            </div>
+        </aside>
+
+        <main class="app-main">
+            <header class="app-topbar">
+                <div class="topbar-left">
+                    <div class="topbar-title">@ViewData["Header"]</div>
+                </div>
+</header>
+
+            <div class="app-content container-fluid">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <partial name="_Toasts" />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

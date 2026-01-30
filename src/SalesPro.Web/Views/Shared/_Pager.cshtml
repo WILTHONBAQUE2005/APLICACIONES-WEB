@@ -1,0 +1,29 @@
+@model SalesPro.Web.ViewModels.PagerVm
+
+@{
+    var current = Model.CurrentPage;
+    var total = Model.TotalPages;
+    var size = Model.PageSize;
+    var baseUrl = Model.BaseUrl;
+    if (!baseUrl.Contains("?")) baseUrl += "?";
+    var joiner = baseUrl.EndsWith("?") || baseUrl.EndsWith("&") ? "" : "&";
+}
+
+@if (total > 1)
+{
+    <nav aria-label="Paginación" class="mt-3">
+        <ul class="pagination justify-content-end">
+            <li class="page-item @(current <= 1 ? "disabled" : "")">
+                <a class="page-link" href="@(baseUrl)@(joiner)p=@(current-1)&pageSize=@(size)">Anterior</a>
+            </li>
+
+            <li class="page-item disabled">
+                <span class="page-link">@current / @total</span>
+            </li>
+
+            <li class="page-item @(current >= total ? "disabled" : "")">
+                <a class="page-link" href="@(baseUrl)@(joiner)p=@(current+1)&pageSize=@(size)">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+}

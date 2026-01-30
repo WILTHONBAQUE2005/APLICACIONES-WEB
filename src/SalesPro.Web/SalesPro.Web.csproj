@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SalesPro.Application\SalesPro.Application.csproj" />
+    <ProjectReference Include="..\SalesPro.Infrastructure\SalesPro.Infrastructure.csproj" />
+    <ProjectReference Include="..\SalesPro.Domain\SalesPro.Domain.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,25 @@
+@model SalesPro.Domain.Entities.Customer
+
+@{
+    ViewData["Title"] = "Eliminar cliente";
+    ViewData["Header"] = "Eliminar cliente";
+}
+
+<div class="card border-danger">
+    <div class="card-body">
+        <h4 class="text-danger mb-2">Confirmar eliminación</h4>
+        <div class="text-muted">Esta acción no se puede deshacer.</div>
+
+        <div class="mt-3">
+            <div><span class="text-muted">Cédula:</span> <span class="fw-semibold">@Model.Cedula</span></div>
+            <div><span class="text-muted">Cliente:</span> <span class="fw-semibold">@Model.FirstName @Model.LastName</span></div>
+        </div>
+
+        <form class="mt-4 d-flex gap-2" method="post" asp-action="DeleteConfirmed">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.CustomerId" />
+            <button class="btn btn-danger" type="submit"><i class="bi bi-trash me-2"></i>Eliminar</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+        </form>
+    </div>
+</div>

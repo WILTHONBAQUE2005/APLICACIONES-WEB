@@ -1,0 +1,60 @@
+@model SalesPro.Web.ViewModels.PagedListVm<SalesPro.Web.Controllers.SaleListRowVm>
+
+@{
+    ViewData["Title"] = "Ventas";
+    ViewData["Header"] = "Ventas";
+}
+
+<div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+    <form class="d-flex gap-2" method="get" asp-action="Index">
+        <input class="form-control" style="min-width: 320px;" name="q" value="@Model.Query" placeholder="Buscar por factura, cédula o cliente" />
+        <input type="hidden" name="pageSize" value="@Model.Pager.PageSize" />
+        <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search me-1"></i>Buscar</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Limpiar</a>
+    </form>
+
+    <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-circle me-2"></i>Nueva venta</a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:170px;">Factura</th>
+                        <th style="width:170px;">Fecha</th>
+                        <th>Cliente</th>
+                        <th style="width:130px;">Cédula</th>
+                        <th style="width:140px;">Total</th>
+                        <th style="width:110px;" class="text-end">Ver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if (Model.Items.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-center py-4 text-muted">Sin resultados</td></tr>
+                }
+                else
+                {
+                    foreach (var it in Model.Items)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@it.InvoiceNumber</td>
+                            <td>@it.SaleDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@it.Customer</td>
+                            <td>@it.Cedula</td>
+                            <td class="fw-semibold">@it.Total.ToString("C")</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@it.SaleId"><i class="bi bi-eye"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<partial name="~/Views/Shared/_Pager.cshtml" model="Model.Pager" />

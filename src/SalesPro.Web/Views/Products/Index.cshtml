@@ -1,0 +1,71 @@
+@model SalesPro.Web.ViewModels.PagedListVm<SalesPro.Web.Controllers.ProductListRowVm>
+
+@{
+    ViewData["Title"] = "Productos";
+    ViewData["Header"] = "Productos";
+}
+
+<div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+    <form class="d-flex gap-2" method="get" asp-action="Index">
+        <input class="form-control" style="min-width: 260px;" name="q" value="@Model.Query" placeholder="Buscar por código o nombre" />
+        <input type="hidden" name="pageSize" value="@Model.Pager.PageSize" />
+        <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search me-1"></i>Buscar</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Limpiar</a>
+    </form>
+
+    <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-circle me-2"></i>Nuevo</a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:140px;">Código</th>
+                        <th>Nombre</th>
+                        <th style="width:120px;">Precio</th>
+                        <th style="width:120px;">Stock</th>
+                        <th style="width:120px;">Estado</th>
+                        <th style="width:170px;" class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if (Model.Items.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-center py-4 text-muted">Sin resultados</td></tr>
+                }
+                else
+                {
+                    foreach (var it in Model.Items)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@it.Code</td>
+                            <td>@it.Name</td>
+                            <td>@it.Price.ToString("C")</td>
+                            <td>@it.Stock</td>
+                            <td>
+                                @if (it.IsActive)
+                                {
+                                    <span class="badge text-bg-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge text-bg-secondary">Inactivo</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@it.ProductId"><i class="bi bi-pencil"></i></a>
+                                <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@it.ProductId"><i class="bi bi-eye"></i></a>
+                                <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@it.ProductId"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<partial name="~/Views/Shared/_Pager.cshtml" model="Model.Pager" />

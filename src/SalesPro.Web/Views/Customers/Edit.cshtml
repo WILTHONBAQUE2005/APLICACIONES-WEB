@@ -1,0 +1,63 @@
+@model SalesPro.Web.ViewModels.CustomerUpsertVm
+
+@{
+    ViewData["Title"] = "Editar cliente";
+    ViewData["Header"] = "Editar cliente";
+}
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="CustomerId" />
+
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Cédula</label>
+                    <input class="form-control" asp-for="Cedula" />
+                    <span class="text-danger small" asp-validation-for="Cedula"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Nombre</label>
+                    <input class="form-control" asp-for="FirstName" />
+                    <span class="text-danger small" asp-validation-for="FirstName"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Apellido</label>
+                    <input class="form-control" asp-for="LastName" />
+                    <span class="text-danger small" asp-validation-for="LastName"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" asp-for="Email" />
+                    <span class="text-danger small" asp-validation-for="Email"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label">Teléfono</label>
+                    <input class="form-control" asp-for="Phone" />
+                    <span class="text-danger small" asp-validation-for="Phone"></span>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Dirección</label>
+                    <input class="form-control" asp-for="Address" />
+                    <span class="text-danger small" asp-validation-for="Address"></span>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="IsActive" />
+                        <label class="form-check-label" asp-for="IsActive">Activo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button class="btn btn-primary" type="submit"><i class="bi bi-check2-circle me-2"></i>Guardar</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
