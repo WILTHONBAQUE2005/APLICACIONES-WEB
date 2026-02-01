@@ -1,0 +1,89 @@
+
+@model List<InventoryMovement>
+@{
+    ViewData["Title"] = "Inventario";
+    var low = ViewBag.LowStock as List<Product> ?? new();
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div>
+        <h4 class="mb-0">Inventario</h4>
+        <div class="text-secondary">Control de stock y movimientos</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-controller="Products" asp-action="Index"><i class="bi bi-box-seam me-1"></i>Ver productos</a>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="fw-semibold mb-2">Bajo stock (≤ 5)</div>
+                @if (low.Count == 0)
+                {
+                    <div class="text-secondary">Todo bien. No hay productos críticos.</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>SKU</th>
+                                    <th>Producto</th>
+                                    <th class="text-end">Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var p in low)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@p.Sku</td>
+                                        <td>@p.Name</td>
+                                        <td class="text-end">
+                                            <span class="badge bg-danger-subtle text-danger">@p.Stock</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="fw-semibold mb-2">Movimientos recientes</div>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Producto</th>
+                                <th>Tipo</th>
+                                <th class="text-end">Cantidad</th>
+                                <th>Motivo</th>
+                                <th>Referencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var m in Model)
+                            {
+                                <tr>
+                                    <td>@m.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>@(m.Product != null ? (m.Product.Sku + " - " + m.Product.Name) : "-")</td>
+                                    <td><span class="badge bg-secondary-subtle text-secondary">@m.Type</span></td>
+                                    <td class="text-end">@m.Quantity</td>
+                                    <td>@((m.Reason ?? "-"))</td>
+                                    <td>@((m.Reference ?? "-"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+
+@model Customer
+@{
+    var isEdit = Model.CustomerId > 0;
+    ViewData["Title"] = isEdit ? "Editar cliente" : "Nuevo cliente";
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div>
+        <h4 class="mb-0">@ViewData["Title"]</h4>
+        <div class="text-secondary">Información del cliente</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Cédula</label>
+                    <input asp-for="DocumentNumber" class="form-control" />
+                    <span asp-validation-for="DocumentNumber" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Nombres</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Apellidos</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label class="form-label">Teléfono</label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label">Activo</label>
+                    <select asp-for="IsActive" class="form-select">
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-primary" type="submit"><i class="bi bi-save2 me-1"></i>Guardar</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mt-3"></div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

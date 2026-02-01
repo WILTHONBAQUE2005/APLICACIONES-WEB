@@ -1,0 +1,57 @@
+
+@model List<Order>
+@{
+    ViewData["Title"] = "Reporte de ventas";
+    var from = (DateTime)ViewBag.From;
+    var to = (DateTime)ViewBag.To;
+    var total = Model.Sum(o => o.Total);
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div>
+        <h4 class="mb-0">Reporte de ventas</h4>
+        <div class="text-secondary">@from.ToLocalTime().ToString("yyyy-MM-dd") a @to.ToLocalTime().ToString("yyyy-MM-dd") · Total: <span class="fw-semibold">$@total.ToString("N2")</span></div>
+    </div>
+</div>
+
+<form class="row g-2 mb-3" method="get">
+    <div class="col-6 col-md-3">
+        <label class="form-label">Desde</label>
+        <input class="form-control" type="date" name="from" value="@from.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-6 col-md-3">
+        <label class="form-label">Hasta</label>
+        <input class="form-control" type="date" name="to" value="@to.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-12 col-md-2 align-self-end">
+        <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-funnel me-1"></i>Aplicar</button>
+    </div>
+</form>
+
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Número</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th class="text-end">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var o in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@o.OrderNumber</td>
+                        <td>@(o.Customer != null ? o.Customer.FullName : "-")</td>
+                        <td>@o.OrderDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                        <td><span class="badge bg-secondary-subtle text-secondary">@o.Status</span></td>
+                        <td class="text-end">$@o.Total.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

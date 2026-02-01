@@ -1,0 +1,268 @@
+
+@model OrderCreateVm
+@{
+    ViewData["Title"] = "Nuevo pedido";
+    var products = ViewBag.Products;
+    var productsJson = System.Text.Json.JsonSerializer.Serialize(products);
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div>
+        <h4 class="mb-0">Nuevo pedido</h4>
+        <div class="text-secondary">Selecciona cliente y agrega productos</div>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form method="post" id="orderForm">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label class="form-label">Cliente</label>
+                        <select asp-for="CustomerId" class="form-select" asp-items="@(ViewBag.Customers as SelectList)"></select>
+                        <span asp-validation-for="CustomerId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Fecha</label>
+                            <input asp-for="OrderDate" class="form-control" type="datetime-local" value="@Model.OrderDate.ToLocalTime().ToString("yyyy-MM-ddTHH:mm")" />
+                            <span asp-validation-for="OrderDate" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Descuento</label>
+                            <input asp-for="Discount" class="form-control" inputmode="decimal" value="@Model.Discount.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
+                            <span asp-validation-for="Discount" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="form-label">Notas</label>
+                        <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                    </div>
+
+                    <div id="itemsContainer"></div>
+
+                    <div class="mt-3 d-flex gap-2">
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-check2-circle me-1"></i>Crear pedido</button>
+                        <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mt-3"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="fw-semibold mb-2">Agregar productos</div>
+
+                <div class="row g-2 align-items-end">
+                    <div class="col-12 col-md-7">
+                        <label class="form-label">Producto</label>
+                        <select id="productSelect" class="form-select"></select>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label class="form-label">Cantidad</label>
+                        <input id="qtyInput" type="number" class="form-control" min="1" value="1" />
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <button id="addBtn" type="button" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-plus-lg me-1"></i>Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-secondary small mt-2" id="productMeta"></div>
+
+                <hr class="my-3" />
+
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle" id="itemsTable">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Producto</th>
+                                <th class="text-end">Precio</th>
+                                <th class="text-end">Cant.</th>
+                                <th class="text-end">Total</th>
+                                <th class="text-end"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-end fw-semibold">Subtotal</td>
+                                <td class="text-end fw-semibold" id="subTotal">$0.00</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end fw-semibold">Descuento</td>
+                                <td class="text-end fw-semibold" id="discTotal">$0.00</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end fw-semibold">Total</td>
+                                <td class="text-end fw-semibold" id="grandTotal">$0.00</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="text-secondary small">El sistema valida stock y recalcula totales en el servidor al guardar.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const products = @Html.Raw(productsJson);
+        const select = document.getElementById('productSelect');
+        const qtyInput = document.getElementById('qtyInput');
+        const meta = document.getElementById('productMeta');
+        const itemsTableBody = document.querySelector('#itemsTable tbody');
+        const itemsContainer = document.getElementById('itemsContainer');
+        const discountInput = document.getElementById('Discount');
+
+        const state = {
+            items: []
+        };
+
+        function money(n) {
+            return '$' + (Math.round(n * 100) / 100).toFixed(2);
+        }
+
+        function renderProductOptions() {
+            select.innerHTML = '';
+            const byCategory = {};
+            for (const p of products) {
+                if (!byCategory[p.Category]) byCategory[p.Category] = [];
+                byCategory[p.Category].push(p);
+            }
+            const categories = Object.keys(byCategory).sort();
+            for (const c of categories) {
+                const group = document.createElement('optgroup');
+                group.label = c || 'Sin categoría';
+                for (const p of byCategory[c]) {
+                    const option = document.createElement('option');
+                    option.value = p.ProductId;
+                    option.textContent = `${p.Sku} - ${p.Name}`;
+                    group.appendChild(option);
+                }
+                select.appendChild(group);
+            }
+        }
+
+        function selectedProduct() {
+            const id = parseInt(select.value);
+            return products.find(p => p.ProductId === id);
+        }
+
+        function updateMeta() {
+            const p = selectedProduct();
+            if (!p) return;
+            meta.textContent = `Categoría: ${p.Category} · Stock: ${p.Stock} · Precio: ${money(p.Price)}`;
+        }
+
+        function upsertItem(p, qty) {
+            const existing = state.items.find(x => x.ProductId === p.ProductId);
+            if (existing) {
+                existing.Quantity += qty;
+            } else {
+                state.items.push({ ProductId: p.ProductId, Sku: p.Sku, Name: p.Name, UnitPrice: p.Price, Quantity: qty });
+            }
+        }
+
+        function removeItem(productId) {
+            state.items = state.items.filter(x => x.ProductId !== productId);
+        }
+
+        function renderTable() {
+            itemsTableBody.innerHTML = '';
+            for (const it of state.items) {
+                const tr = document.createElement('tr');
+                const lineTotal = it.UnitPrice * it.Quantity;
+                tr.innerHTML = `
+                    <td class="fw-semibold">${it.Sku}</td>
+                    <td>${it.Name}</td>
+                    <td class="text-end">${money(it.UnitPrice)}</td>
+                    <td class="text-end">${it.Quantity}</td>
+                    <td class="text-end">${money(lineTotal)}</td>
+                    <td class="text-end">
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-remove="${it.ProductId}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                itemsTableBody.appendChild(tr);
+            }
+
+            for (const btn of document.querySelectorAll('[data-remove]')) {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-remove'));
+                    removeItem(id);
+                    syncHidden();
+                    renderTable();
+                });
+            }
+
+            const subtotal = state.items.reduce((a, b) => a + (b.UnitPrice * b.Quantity), 0);
+            const disc = parseFloat((discountInput?.value || '0').replace(',', '.')) || 0;
+            const total = Math.max(0, subtotal - disc);
+            document.getElementById('subTotal').textContent = money(subtotal);
+            document.getElementById('discTotal').textContent = money(disc);
+            document.getElementById('grandTotal').textContent = money(total);
+        }
+
+        function syncHidden() {
+            itemsContainer.innerHTML = '';
+            state.items.forEach((it, i) => {
+                const p1 = document.createElement('input');
+                p1.type = 'hidden';
+                p1.name = `Items[${i}].ProductId`;
+                p1.value = it.ProductId;
+                itemsContainer.appendChild(p1);
+
+                const p2 = document.createElement('input');
+                p2.type = 'hidden';
+                p2.name = `Items[${i}].Quantity`;
+                p2.value = it.Quantity;
+                itemsContainer.appendChild(p2);
+
+                const p3 = document.createElement('input');
+                p3.type = 'hidden';
+                p3.name = `Items[${i}].UnitPrice`;
+                p3.value = it.UnitPrice;
+                itemsContainer.appendChild(p3);
+            });
+        }
+
+        document.getElementById('addBtn').addEventListener('click', () => {
+            const p = selectedProduct();
+            const qty = parseInt(qtyInput.value);
+            if (!p || !qty || qty <= 0) return;
+            upsertItem(p, qty);
+            syncHidden();
+            renderTable();
+        });
+
+        if (discountInput) {
+            discountInput.addEventListener('input', () => renderTable());
+        }
+
+        renderProductOptions();
+        updateMeta();
+        select.addEventListener('change', updateMeta);
+        renderTable();
+    </script>
+}

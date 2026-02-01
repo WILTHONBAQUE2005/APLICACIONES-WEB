@@ -1,0 +1,187 @@
+
+@model DashboardVm
+@{
+    ViewData["Title"] = "Dashboard";
+    var salesLabels = string.Join(",", Model.SalesSeries.Select(x => $"'{x.Day}'"));
+    var salesData = string.Join(",", Model.SalesSeries.Select(x => x.Total.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+    var topLabels = string.Join(",", Model.TopProducts.Select(x => $"'{x.Sku}'"));
+    var topData = string.Join(",", Model.TopProducts.Select(x => x.Revenue.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div>
+        <h4 class="mb-0">Dashboard</h4>
+        <div class="text-secondary">Resumen de los últimos 30 días</div>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <div class="text-secondary small">Ventas (30 días)</div>
+                        <div class="kpi-value">$@Model.SalesLast30Days.ToString("N2")</div>
+                    </div>
+                    <div class="kpi-icon bg-primary-subtle text-primary">
+                        <i class="bi bi-cash-coin"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <div class="text-secondary small">Pedidos abiertos</div>
+                        <div class="kpi-value">@Model.OrdersOpen</div>
+                    </div>
+                    <div class="kpi-icon bg-warning-subtle text-warning">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <div class="text-secondary small">Clientes activos</div>
+                        <div class="kpi-value">@Model.CustomersActive</div>
+                    </div>
+                    <div class="kpi-icon bg-success-subtle text-success">
+                        <i class="bi bi-people"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card kpi-card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <div class="text-secondary small">Bajo stock (≤ 5)</div>
+                        <div class="kpi-value">@Model.LowStockProducts</div>
+                    </div>
+                    <div class="kpi-icon bg-danger-subtle text-danger">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-xl-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="fw-semibold">Ventas por día</div>
+                    <div class="text-secondary small">@Model.SalesSeries.Count días</div>
+                </div>
+                <canvas id="salesChart" height="105"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="fw-semibold">Top productos</div>
+                    <a asp-controller="Products" asp-action="Index" class="small text-decoration-none">Ver productos</a>
+                </div>
+                <canvas id="topChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mt-3">
+    <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="fw-semibold">Pedidos recientes</div>
+            <a asp-controller="Orders" asp-action="Index" class="small text-decoration-none">Ver todos</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th class="text-end">Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var o in Model.RecentOrders)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@o.OrderNumber</td>
+                            <td>@o.Customer</td>
+                            <td>@o.Date.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                            <td><span class="badge bg-secondary-subtle text-secondary">@o.Status</span></td>
+                            <td class="text-end">$@o.Total.ToString("N2")</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Orders" asp-action="Details" asp-route-id="@o.OrderId">Abrir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const salesLabels = [@Html.Raw(salesLabels)];
+    const salesData = [@Html.Raw(salesData)];
+    const topLabels = [@Html.Raw(topLabels)];
+    const topData = [@Html.Raw(topData)];
+
+    const salesCtx = document.getElementById('salesChart');
+    new Chart(salesCtx, {
+        type: 'line',
+        data: {
+            labels: salesLabels,
+            datasets: [{
+                label: 'Total',
+                data: salesData,
+                tension: 0.35,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    const topCtx = document.getElementById('topChart');
+    new Chart(topCtx, {
+        type: 'bar',
+        data: {
+            labels: topLabels,
+            datasets: [{
+                label: 'Ingresos',
+                data: topData
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+}

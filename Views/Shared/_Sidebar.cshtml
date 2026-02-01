@@ -1,0 +1,40 @@
+
+<div class="p-3">
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="app-logo">
+            <i class="bi bi-receipt-cutoff"></i>
+        </div>
+        <div class="lh-sm">
+            <div class="fw-semibold">Sistema pedidos</div>
+            <div class="text-secondary small">Panel</div>
+        </div>
+    </div>
+
+    <nav class="nav flex-column gap-1">
+        <a class="nav-link app-navlink" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+        </a>
+        <a class="nav-link app-navlink" asp-controller="Orders" asp-action="Index">
+            <i class="bi bi-bag-check me-2"></i>Pedidos
+        </a>
+        <a class="nav-link app-navlink" asp-controller="Customers" asp-action="Index">
+            <i class="bi bi-people me-2"></i>Clientes
+        </a>
+        <a class="nav-link app-navlink" asp-controller="Products" asp-action="Index">
+            <i class="bi bi-box-seam me-2"></i>Productos
+        </a>
+        <a class="nav-link app-navlink" asp-controller="Categories" asp-action="Index">
+            <i class="bi bi-tags me-2"></i>Categorías
+        </a>
+        <a class="nav-link app-navlink" asp-controller="Inventory" asp-action="Index">
+            <i class="bi bi-clipboard-data me-2"></i>Inventario
+        </a>
+        <a class="nav-link app-navlink" asp-controller="Reports" asp-action="Sales">
+            <i class="bi bi-graph-up-arrow me-2"></i>Reporte ventas
+        </a>
+    </nav>
+
+    <div class="mt-4 small text-secondary">
+        MariaDB (XAMPP) · ASP.NET Core MVC
+    </div>
+</div>

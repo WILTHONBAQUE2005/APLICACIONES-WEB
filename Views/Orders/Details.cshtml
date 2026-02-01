@@ -1,0 +1,233 @@
+
+@model OrderDetailsVm
+@{
+    ViewData["Title"] = "Detalle pedido";
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div>
+        <h4 class="mb-0">@Model.OrderNumber</h4>
+        <div class="text-secondary">@Model.Customer · @Model.OrderDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</div>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" asp-action="Index"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-secondary small">Estado</div>
+                        <div class="fw-semibold">@Model.Status</div>
+                    </div>
+                    <div>
+                        <div class="text-secondary small">Pago</div>
+                        <div class="fw-semibold">@Model.PaymentStatus</div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="text-secondary small">Subtotal</div>
+                        <div class="fw-semibold">$@Model.Subtotal.ToString("N2")</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-secondary small">Descuento</div>
+                        <div class="fw-semibold">$@Model.Discount.ToString("N2")</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-secondary small">Impuesto</div>
+                        <div class="fw-semibold">$@Model.Tax.ToString("N2")</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-secondary small">Total</div>
+                        <div class="fw-semibold">$@Model.Total.ToString("N2")</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-secondary small">Notas</div>
+                        <div class="fw-semibold">@((Model.Notes ?? "-"))</div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <form method="post" asp-action="ChangeStatus" class="row g-2 align-items-end">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="orderId" value="@Model.OrderId" />
+                    <div class="col-8">
+                        <label class="form-label">Cambiar estado</label>
+                        <select class="form-select" name="status" asp-items="@(ViewBag.OrderStatusList as SelectList)"></select>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-outline-primary w-100" type="submit"><i class="bi bi-arrow-repeat me-1"></i>Aplicar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mt-3">
+            <div class="card-body">
+                <div class="fw-semibold mb-2">Registrar pago</div>
+                <form method="post" asp-action="AddPayment" class="row g-2 align-items-end">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="OrderId" value="@Model.OrderId" />
+                    <div class="col-12 col-md-5">
+                        <label class="form-label">Método</label>
+                        <select class="form-select" name="Method" asp-items="@(ViewBag.PaymentMethodList as SelectList)"></select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Monto</label>
+                        <input class="form-control" name="Amount" inputmode="decimal" value="@Model.NewPayment.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <button class="btn btn-outline-success w-100" type="submit"><i class="bi bi-cash-coin me-1"></i>Guardar</button>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Referencia (opcional)</label>
+                        <input class="form-control" name="Reference" />
+                    </div>
+                </form>
+
+                <hr />
+
+                <div class="fw-semibold mb-2">Pagos</div>
+                @if (Model.Payments.Count == 0)
+                {
+                    <div class="text-secondary">Sin pagos registrados.</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Método</th>
+                                    <th class="text-end">Monto</th>
+                                    <th>Referencia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var p in Model.Payments)
+                                {
+                                    <tr>
+                                        <td>@p.PaidAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@p.Method</td>
+                                        <td class="text-end">$@p.Amount.ToString("N2")</td>
+                                        <td>@((p.Reference ?? "-"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="fw-semibold mb-2">Detalle de productos</div>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>SKU</th>
+                                <th>Producto</th>
+                                <th class="text-end">Precio</th>
+                                <th class="text-end">Cant.</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var i in Model.Items)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@i.Sku</td>
+                                    <td>@i.Product</td>
+                                    <td class="text-end">$@i.UnitPrice.ToString("N2")</td>
+                                    <td class="text-end">@i.Quantity</td>
+                                    <td class="text-end">$@i.LineTotal.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mt-3">
+            <div class="card-body">
+                <div class="fw-semibold mb-2">Envío</div>
+
+                <form method="post" asp-action="UpdateShipment" class="row g-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="OrderId" value="@Model.OrderId" />
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" name="Status" asp-items="@(ViewBag.ShipmentStatusList as SelectList)"></select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Transportista</label>
+                        <input class="form-control" name="Carrier" value="@Model.ShipmentUpdate.Carrier" />
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Tracking</label>
+                        <input class="form-control" name="TrackingNumber" value="@Model.ShipmentUpdate.TrackingNumber" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Enviar a</label>
+                        <input class="form-control" name="ShipTo" value="@Model.ShipmentUpdate.ShipTo" />
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <button class="btn btn-outline-primary w-100" type="submit"><i class="bi bi-truck me-1"></i>Guardar</button>
+                    </div>
+                </form>
+
+                <div class="mt-3">
+                    <div class="text-secondary small">Actual</div>
+                    @if (Model.Shipment == null)
+                    {
+                        <div class="text-secondary">Sin información de envío.</div>
+                    }
+                    else
+                    {
+                        <div class="row g-2">
+                            <div class="col-12 col-md-4">
+                                <div class="fw-semibold">@Model.Shipment.Status</div>
+                                <div class="text-secondary small">Estado</div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="fw-semibold">@((Model.Shipment.Carrier ?? "-"))</div>
+                                <div class="text-secondary small">Transportista</div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="fw-semibold">@((Model.Shipment.TrackingNumber ?? "-"))</div>
+                                <div class="text-secondary small">Tracking</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="fw-semibold">@((Model.Shipment.ShipTo ?? "-"))</div>
+                                <div class="text-secondary small">Destino</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="fw-semibold">@((Model.Shipment.ShippedAt?.ToLocalTime().ToString("yyyy-MM-dd HH:mm") ?? "-"))</div>
+                                <div class="text-secondary small">Enviado</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="fw-semibold">@((Model.Shipment.DeliveredAt?.ToLocalTime().ToString("yyyy-MM-dd HH:mm") ?? "-"))</div>
+                                <div class="text-secondary small">Entregado</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

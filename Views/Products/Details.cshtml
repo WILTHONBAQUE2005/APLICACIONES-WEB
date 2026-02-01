@@ -1,0 +1,112 @@
+
+@model Product
+@{
+    ViewData["Title"] = "Detalle producto";
+    var moves = ViewBag.Movements as List<InventoryMovement> ?? new();
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <div>
+        <h4 class="mb-0">@Model.Name</h4>
+        <div class="text-secondary">@Model.Sku · @(Model.Category?.Name ?? "-")</div>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.ProductId"><i class="bi bi-pencil-square me-1"></i>Editar</a>
+        <a class="btn btn-outline-secondary" asp-action="Index"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="text-secondary small">Precio</div>
+                        <div class="fw-semibold">$@Model.UnitPrice.ToString("N2")</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-secondary small">Stock</div>
+                        <div class="fw-semibold">@Model.Stock</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-secondary small">Descripción</div>
+                        <div class="fw-semibold">@((Model.Description ?? "-"))</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-secondary small">Estado</div>
+                        <div>
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success-subtle text-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary-subtle text-secondary">Inactivo</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mt-3">
+            <div class="card-body">
+                <div class="fw-semibold mb-2">Ajuste de stock</div>
+                <form method="post" asp-action="AdjustStock" asp-route-id="@Model.ProductId" class="row g-2">
+                    @Html.AntiForgeryToken()
+                    <div class="col-12 col-md-4">
+                        <input class="form-control" type="number" name="quantity" placeholder="+/- cantidad" required />
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <input class="form-control" name="reason" placeholder="Motivo (opcional)" />
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <button class="btn btn-outline-primary w-100" type="submit"><i class="bi bi-arrow-repeat me-1"></i>Aplicar</button>
+                    </div>
+                </form>
+                <div class="text-secondary small mt-2">Usa valores positivos para sumar stock y negativos para restar.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="fw-semibold mb-2">Movimientos recientes</div>
+                @if (moves.Count == 0)
+                {
+                    <div class="text-secondary">Sin movimientos.</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th class="text-end">Cantidad</th>
+                                    <th>Motivo</th>
+                                    <th>Referencia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var m in moves)
+                                {
+                                    <tr>
+                                        <td>@m.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td><span class="badge bg-secondary-subtle text-secondary">@m.Type</span></td>
+                                        <td class="text-end">@m.Quantity</td>
+                                        <td>@((m.Reason ?? "-"))</td>
+                                        <td>@((m.Reference ?? "-"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
