@@ -1,88 +1,80 @@
-# Página Web (Angular + .NET + MariaDB)
+Aquí tienes un README.md simple, claro y “como si lo hicieras tú”. Copia y pega tal cual.
 
-Proyecto académico: **CRUD profesional** de **Clientes** y **Productos** con **autenticación por cookies**, rutas protegidas, interceptor, guard, validación reactiva, manejo de errores y base de datos MariaDB (XAMPP).
+# Semana 5 y 6 – Página Web (Angular + .NET + MySQL/MariaDB)
 
-## Estructura
+Proyecto académico: sistema web con login (cookies) y CRUD de **Clientes** y **Productos**.
 
-- `backend/` API .NET 8 (cookie auth + XSRF + EF Core + MariaDB)
-- `frontend/` Angular (login + dashboard + CRUD clientes/productos)
-- `database/` script opcional para crear la base
+---
 
 ## Requisitos
+- Tener instalado **Node.js**
+- Tener instalado **.NET SDK 8**
+- Tener **XAMPP** (para MySQL/MariaDB)
 
-- Windows 10/11
-- **XAMPP** (MariaDB/MySQL) corriendo en `localhost:3306`
-- **.NET SDK 8**
-- **Node.js LTS** (18+)
-- (Opcional) Git
+---
 
-## Paso a paso (para que corra a la primera)
+## 1) Iniciar la Base de Datos (XAMPP)
+1. Abre **XAMPP Control Panel**
+2. Enciende **MySQL**
+3. (Opcional) Abre **phpMyAdmin** y confirma que existe la base `pagina_web`
+   - Si no existe, el backend la creará con migraciones si está configurado para eso.
 
-### 1) Base de datos (XAMPP)
+---
 
-1. Abre XAMPP y enciende **MySQL**.
-2. Entra a `http://localhost/phpmyadmin`.
-3. Crea una base llamada: `pagina_web`.
-4. Si tu MariaDB tiene contraseña en `root`, anótala.
+## 2) Ejecutar el Backend (.NET)
+1. Abre CMD
+2. Ve a la carpeta del backend:
 
-También puedes ejecutar `database/init.sql` desde phpMyAdmin.
+```bat
+cd /d "C:\Users\baque\OneDrive\Escritorio\APLICACIONES WEB\Semana 5\pagina web\backend"
 
-### 2) Backend (.NET)
 
-En una terminal:
+Ejecuta la API:
 
-```bash
-cd backend/src/PaginaWeb.Api
-dotnet restore
-dotnet run
-```
+dotnet run --project "src\PaginaWeb.Api"
 
-- La API se levanta (por defecto) en `http://localhost:5200`.
-- En el primer arranque aplica migraciones automáticamente y crea un usuario admin si no existe.
 
-**Credenciales demo (puedes cambiarlas en la UI luego):**
-- Email: `admin@demo.com`
-- Password: `Admin123!`
+La API queda activa en un puerto local (sale en la consola).
 
-Si tu usuario/clave de MariaDB es diferente, edita:
-`backend/src/PaginaWeb.Api/appsettings.Development.json`
+Si tienes Swagger habilitado, normalmente es /swagger.
 
-### 3) Frontend (Angular)
+3) Ejecutar el Frontend (Angular)
 
-En otra terminal:
+Abre otra ventana CMD
 
-```bash
-cd frontend
+Ve a la carpeta del frontend:
+
+cd /d "C:\Users\baque\OneDrive\Escritorio\APLICACIONES WEB\Semana 5\pagina web\frontend"
+
+
+Instala dependencias (solo la primera vez):
+
 npm install
+
+
+Inicia Angular:
+
 npm start
-```
 
-Esto levanta Angular en `http://localhost:4200` usando proxy hacia la API (`/api`), para que cookies funcionen sin CORS.
 
-### 4) Probar
+Abre en el navegador:
 
-1. Abre `http://localhost:4200`
-2. Login con `admin@demo.com` / `Admin123!`
-3. Entra a **Clientes** y **Productos** y prueba crear/editar/eliminar.
+http://localhost:4200
 
-## Postman y .http
+Login (demo)
 
-- `backend/PaginaWeb.postman_collection.json`
-- `backend/PaginaWeb.http`
+Email: admin@demo.com
 
-## Subir a GitHub (link para entregar)
+Password: Admin123!
 
-1. Crea un repo vacío en GitHub (ej. `pagina-web`).
-2. En la carpeta extraída:
+Notas rápidas (si algo falla)
 
-```bash
-git init
-git add .
-git commit -m "Entrega CRUD Angular + .NET + MariaDB"
-git branch -M main
-git remote add origin https://github.com/TU_USUARIO/TU_REPO.git
-git push -u origin main
-```
+Si no cargan clientes o productos:
 
-Luego entrega el enlace.
+Abre DevTools (F12) → Network
 
+Revisa la petición a /api/...
+
+Si sale 500, normalmente es un dato NULL en BD o un error del backend.
+
+Si sale 401/403, revisa que el backend esté corriendo y que el login esté hecho
