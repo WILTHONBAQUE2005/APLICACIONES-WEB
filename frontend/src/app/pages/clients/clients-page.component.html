@@ -1,0 +1,158 @@
+<div class="flex flex-col gap-5">
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+    <div>
+      <div class="text-2xl font-bold tracking-tight">Clientes</div>
+      <div class="text-sm text-slate-300">Registro, edición y control de estado.</div>
+    </div>
+
+    <div class="flex gap-2">
+      <input class="input w-[260px]" [formControl]="search" placeholder="Buscar por nombre, cédula, email">
+      <button class="btn-primary" (click)="openCreate()">Nuevo</button>
+    </div>
+  </div>
+
+  <div class="glass rounded-3xl p-5">
+    <div class="flex items-center justify-between">
+      <div class="text-sm text-slate-300" *ngIf="!loading">{{ filtered.length }} registros</div>
+      <div class="text-sm text-slate-300" *ngIf="loading">Cargando…</div>
+      <button class="btn-ghost" (click)="reload()" [disabled]="loading">Refrescar</button>
+    </div>
+
+    <div class="mt-4 overflow-auto">
+      <table class="table min-w-[980px]">
+        <thead>
+          <tr>
+            <th>Documento</th>
+            <th>Nombre</th>
+            <th>Contacto</th>
+            <th>Ciudad</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of filtered">
+            <td>
+              <div class="font-semibold">{{ c.documentType }} {{ c.documentNumber }}</div>
+              <div class="text-xs text-slate-400">Alta: {{ c.createdAtUtc | date:'mediumDate' }}</div>
+            </td>
+            <td>
+              <div class="font-semibold">{{ c.firstName }} {{ c.lastName }}</div>
+              <div class="text-xs text-slate-400">Actual: {{ c.updatedAtUtc | date:'mediumDate' }}</div>
+            </td>
+            <td>
+              <div class="text-sm">{{ c.email || '—' }}</div>
+              <div class="text-xs text-slate-400">{{ c.phone || '—' }}</div>
+            </td>
+            <td>{{ c.city || '—' }}</td>
+            <td>
+              <span [class.badge-on]="c.isActive" [class.badge-off]="!c.isActive">{{ c.isActive ? 'Activo' : 'Inactivo' }}</span>
+            </td>
+            <td class="text-right">
+              <div class="flex justify-end gap-2">
+                <button class="btn-ghost" (click)="openEdit(c)">Editar</button>
+                <button class="btn-ghost" (click)="toggleActive(c)">
+  {{ c.isActive ? 'Desactivar' : 'Activar' }}
+</button>
+
+
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="!loading && filtered.length === 0">
+            <td colspan="6" class="py-10 text-center text-slate-300">Sin resultados</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="modalOpen" class="fixed inset-0 z-40 flex items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/70" (click)="closeModal()"></div>
+
+  <div class="relative z-50 w-full max-w-2xl glass soft-shadow rounded-3xl p-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <div class="text-xl font-bold">{{ editing ? 'Editar cliente' : 'Nuevo cliente' }}</div>
+        <div class="text-sm text-slate-300">Completa la información para guardar.</div>
+      </div>
+      <button class="btn-ghost h-10 w-10 px-0 rounded-2xl" (click)="closeModal()">×</button>
+    </div>
+
+    <form class="mt-6 grid gap-4" [formGroup]="form" (ngSubmit)="save()">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <div class="label">Tipo</div>
+          <select class="input app-select" formControlName="documentType">
+            <option value="CEDULA">Cédula</option>
+            <option value="RUC">RUC</option>
+            <option value="PASAPORTE">Pasaporte</option>
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <div class="label">Número</div>
+          <input class="input mt-2" formControlName="documentNumber" placeholder="0102030405">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.documentNumber.touched && form.controls.documentNumber.invalid">Requerido</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <div class="label">Nombres</div>
+          <input class="input mt-2" formControlName="firstName" placeholder="Juan">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">Requerido</div>
+        </div>
+        <div>
+          <div class="label">Apellidos</div>
+          <input class="input mt-2" formControlName="lastName" placeholder="Pérez">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">Requerido</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <div class="label">Email</div>
+          <input class="input mt-2" formControlName="email" placeholder="correo@mail.com">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.email.touched && form.controls.email.invalid">Email inválido</div>
+        </div>
+        <div>
+          <div class="label">Teléfono</div>
+          <input class="input mt-2" formControlName="phone" placeholder="+593...">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <div class="label">Dirección</div>
+          <input class="input mt-2" formControlName="addressLine1" placeholder="Av. Principal 123">
+        </div>
+        <div>
+          <div class="label">Ciudad</div>
+          <input class="input mt-2" formControlName="city" placeholder="La Concordia">
+        </div>
+      </div>
+
+      <div>
+        <div class="label">Notas</div>
+        <textarea class="input mt-2 min-h-[90px]" formControlName="notes" placeholder="Observaciones (opcional)"></textarea>
+      </div>
+
+      <div class="flex items-center justify-between gap-4">
+        <label class="inline-flex items-center gap-2 text-sm text-slate-300">
+          <input type="checkbox" class="h-4 w-4 accent-sky-400" formControlName="isActive">
+          Activo
+        </label>
+
+        <div class="flex gap-2">
+          <button type="button" class="btn-ghost" (click)="closeModal()" [disabled]="saving">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="saving || form.invalid">
+            <span *ngIf="!saving">Guardar</span>
+            <span *ngIf="saving">Guardando…</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

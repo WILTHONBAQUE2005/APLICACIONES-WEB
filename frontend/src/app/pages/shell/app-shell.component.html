@@ -1,0 +1,50 @@
+<div class="min-h-screen flex">
+  <aside class="w-[270px] hidden md:flex flex-col p-4">
+    <div class="glass soft-shadow rounded-3xl p-5">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-sky-400 to-violet-500"></div>
+        <div>
+          <div class="text-base font-bold leading-tight">Panel</div>
+          <div class="text-xs text-slate-300">Gestión</div>
+        </div>
+      </div>
+
+      <nav class="mt-6 grid gap-2">
+        <a routerLink="/app/clients" routerLinkActive="bg-white/10" class="rounded-2xl px-4 py-3 bg-white/5 hover:bg-white/10 transition">
+          <div class="text-sm font-semibold">Clientes</div>
+          <div class="text-xs text-slate-300">CRUD y búsqueda</div>
+        </a>
+        <a routerLink="/app/products" routerLinkActive="bg-white/10" class="rounded-2xl px-4 py-3 bg-white/5 hover:bg-white/10 transition">
+          <div class="text-sm font-semibold">Productos</div>
+          <div class="text-xs text-slate-300">Stock y precios</div>
+        </a>
+      </nav>
+
+      <div class="mt-6 border-t border-white/10 pt-5" *ngIf="me$ | async as me">
+        <div class="text-xs text-slate-300 font-semibold">Sesión</div>
+        <div class="mt-1 text-sm font-semibold">{{ me.fullName }}</div>
+        <div class="text-xs text-slate-400">{{ me.email }}</div>
+        <button class="btn-ghost mt-4 w-full" (click)="logout()">Cerrar sesión</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="flex-1 p-4 md:p-6">
+    <div class="glass soft-shadow rounded-3xl min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] p-5 md:p-7">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <div class="text-xl font-bold tracking-tight">Página Web</div>
+          <div class="text-sm text-slate-300">Clientes y Productos</div>
+        </div>
+        <div class="flex gap-2 md:hidden">
+          <a routerLink="/app/clients" routerLinkActive="bg-white/10" class="btn-ghost">Clientes</a>
+          <a routerLink="/app/products" routerLinkActive="bg-white/10" class="btn-ghost">Productos</a>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+</div>

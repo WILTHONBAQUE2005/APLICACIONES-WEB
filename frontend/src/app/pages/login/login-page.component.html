@@ -1,0 +1,111 @@
+<div class="min-h-screen flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="glass soft-shadow rounded-3xl p-7 md:p-10">
+      <div class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-2xl bg-gradient-to-br from-sky-400 to-violet-500"></div>
+        <div>
+          <div class="text-xl font-bold tracking-tight">Página Web</div>
+          <div class="text-sm text-slate-300">Clientes y Productos</div>
+        </div>
+      </div>
+
+      <div class="mt-10">
+        <div class="text-3xl font-bold leading-tight">Accede a tu panel</div>
+
+        <div class="mt-8 grid gap-4">
+          <div class="glass rounded-2xl p-4">
+            <div class="text-xs text-slate-300 font-semibold">Usuario demo</div>
+            <div class="mt-1 text-sm"><span class="text-slate-200 font-semibold">admin&#64;demo.com</span></div>
+            <div class="mt-1 text-sm"><span class="text-slate-200 font-semibold">Admin123!</span></div>
+          </div>
+
+          <div class="glass rounded-2xl p-4">
+            <div class="text-xs text-slate-300 font-semibold">Tip</div>
+            <div class="mt-1 text-sm text-slate-200">Si cambias la contraseña o el usuario, mantén un correo válido y una clave fuerte.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass soft-shadow rounded-3xl p-7 md:p-10">
+      <div class="flex items-center justify-between gap-3">
+  <div class="text-xl font-bold tracking-tight">
+    {{ mode === 'login' ? 'Iniciar sesión' : 'Registrarse' }}
+  </div>
+
+  <button type="button" class="btn-ghost" (click)="toggleMode()">
+    {{ mode === 'login' ? 'Crear cuenta' : 'Ya tengo cuenta' }}
+  </button>
+</div>
+
+      <div class="mt-2 text-sm text-slate-300">Tus rutas quedarán protegidas y la sesión se maneja con cookies seguras.</div>
+
+      <form *ngIf="mode==='login'" class="mt-8 grid gap-4" [formGroup]="form" (ngSubmit)="submit()">
+
+        <div>
+          <div class="label">Email</div>
+          <input class="input mt-2" formControlName="email" autocomplete="username" placeholder="tu@email.com">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.email.touched && form.controls.email.invalid">Ingresa un email válido</div>
+        </div>
+
+        <div>
+          <div class="label">Contraseña</div>
+          <input class="input mt-2" type="password" formControlName="password" autocomplete="current-password" placeholder="••••••••">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.password.touched && form.controls.password.invalid">Mínimo 6 caracteres</div>
+        </div>
+
+        <button class="btn-primary mt-2" type="submit" [disabled]="busy || form.invalid">
+          <span *ngIf="!busy">Entrar</span>
+          <span *ngIf="busy">Validando…</span>
+        </button>
+
+        <div class="mt-1 text-xs text-slate-400">Al iniciar sesión aceptas el uso de cookies de sesión para fines académicos.</div>
+      </form>
+<form *ngIf="mode==='register'" class="mt-8 grid gap-4" [formGroup]="registerForm" (ngSubmit)="register()">
+  <div>
+    <div class="label">Nombre completo</div>
+    <input class="input mt-2" formControlName="fullName" autocomplete="name" placeholder="Tu nombre">
+    <div class="mt-1 text-xs text-rose-300"
+         *ngIf="registerForm.controls.fullName.touched && registerForm.controls.fullName.invalid">
+      Mínimo 3 caracteres
+    </div>
+  </div>
+
+  <div>
+    <div class="label">Email</div>
+    <input class="input mt-2" formControlName="email" autocomplete="email" placeholder="tu@email.com">
+    <div class="mt-1 text-xs text-rose-300"
+         *ngIf="registerForm.controls.email.touched && registerForm.controls.email.invalid">
+      Ingresa un email válido
+    </div>
+  </div>
+
+  <div>
+    <div class="label">Contraseña</div>
+    <input class="input mt-2" type="password" formControlName="password" autocomplete="new-password" placeholder="••••••••">
+    <div class="mt-1 text-xs text-rose-300"
+         *ngIf="registerForm.controls.password.touched && registerForm.controls.password.invalid">
+      Mínimo 6 caracteres
+    </div>
+  </div>
+
+  <div>
+    <div class="label">Confirmar contraseña</div>
+    <input class="input mt-2" type="password" formControlName="confirm" autocomplete="new-password" placeholder="••••••••">
+    <div class="mt-1 text-xs text-rose-300"
+         *ngIf="registerForm.controls.confirm.touched && registerForm.controls.confirm.invalid">
+      Mínimo 6 caracteres
+    </div>
+  </div>
+
+  <button class="btn-primary mt-2" type="submit" [disabled]="busy || registerForm.invalid">
+    <span *ngIf="!busy">Crear cuenta</span>
+    <span *ngIf="busy">Creando…</span>
+  </button>
+
+  <div class="mt-1 text-xs text-slate-400">El registro es para fines académicos.</div>
+</form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,149 @@
+<div class="flex flex-col gap-5">
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+    <div>
+      <div class="text-2xl font-bold tracking-tight">Productos</div>
+      <div class="text-sm text-slate-300">Catálogo, stock y precios.</div>
+    </div>
+
+    <div class="flex gap-2">
+      <input class="input w-[260px]" [formControl]="search" placeholder="Buscar por SKU, nombre, categoría">
+      <button class="btn-primary" (click)="openCreate()">Nuevo</button>
+    </div>
+  </div>
+
+  <div class="glass rounded-3xl p-5">
+    <div class="flex items-center justify-between">
+      <div class="text-sm text-slate-300" *ngIf="!loading">{{ filtered.length }} registros</div>
+      <div class="text-sm text-slate-300" *ngIf="loading">Cargando…</div>
+      <button class="btn-ghost" (click)="reload()" [disabled]="loading">Refrescar</button>
+    </div>
+
+    <div class="mt-4 overflow-auto">
+      <table class="table min-w-[980px]">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filtered">
+            <td>
+              <div class="font-semibold">{{ p.name }}</div>
+              <div class="text-xs text-slate-400">{{ p.sku }} <span class="mx-1">•</span> {{ p.barcode || '—' }}</div>
+            </td>
+            <td>{{ p.category || '—' }}</td>
+            <td>
+              <div class="font-semibold">$ {{ p.price | number:'1.2-2' }}</div>
+              <div class="text-xs text-slate-400">Actual: {{ p.updatedAtUtc | date:'mediumDate' }}</div>
+            </td>
+            <td>
+              <div class="font-semibold">{{ p.stock }}</div>
+              <div class="text-xs text-slate-400">Alta: {{ p.createdAtUtc | date:'mediumDate' }}</div>
+            </td>
+            <td>
+              <span [class.badge-on]="p.isActive" [class.badge-off]="!p.isActive">{{ p.isActive ? 'Activo' : 'Inactivo' }}</span>
+            </td>
+            <td class="text-right">
+              <div class="flex justify-end gap-2">
+                <button class="btn-ghost" (click)="openEdit(p)">Editar</button>
+                <button class="btn-ghost" (click)="toggleActive(p)">
+  {{ p.isActive ? 'Desactivar' : 'Activar' }}
+</button>
+
+
+
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="!loading && filtered.length === 0">
+            <td colspan="6" class="py-10 text-center text-slate-300">Sin resultados</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="modalOpen" class="fixed inset-0 z-40 flex items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/70" (click)="closeModal()"></div>
+
+  <div class="relative z-50 w-full max-w-2xl glass soft-shadow rounded-3xl p-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <div class="text-xl font-bold">{{ editing ? 'Editar producto' : 'Nuevo producto' }}</div>
+        <div class="text-sm text-slate-300">Mantén SKU único y precio válido.</div>
+      </div>
+      <button class="btn-ghost h-10 w-10 px-0 rounded-2xl" (click)="closeModal()">×</button>
+    </div>
+
+    <form class="mt-6 grid gap-4" [formGroup]="form" (ngSubmit)="save()">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <div class="label">SKU</div>
+          <input class="input mt-2" formControlName="sku" placeholder="PRD-0001">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.sku.touched && form.controls.sku.invalid">Requerido</div>
+        </div>
+        <div class="md:col-span-2">
+          <div class="label">Nombre</div>
+          <input class="input mt-2" formControlName="name" placeholder="Producto">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.name.touched && form.controls.name.invalid">Requerido</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <div class="label">Categoría</div>
+          <input class="input mt-2" formControlName="category" placeholder="General">
+        </div>
+        <div>
+          <div class="label">Código de barras</div>
+          <input class="input mt-2" formControlName="barcode" placeholder="7500000000000">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <div class="label">Precio</div>
+          <input class="input mt-2" type="number" min="0" step="0.01" formControlName="price">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.price.touched && form.controls.price.invalid">Precio inválido</div>
+        </div>
+        <div>
+          <div class="label">Stock</div>
+          <input class="input mt-2" type="number" min="0" step="1" formControlName="stock">
+          <div class="mt-1 text-xs text-rose-300" *ngIf="form.controls.stock.touched && form.controls.stock.invalid">Stock inválido</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="label">Descripción</div>
+        <textarea class="input mt-2 min-h-[90px]" formControlName="description" placeholder="Descripción (opcional)"></textarea>
+      </div>
+
+      <div>
+        <div class="label">Imagen URL</div>
+        <input class="input mt-2" formControlName="imageUrl" placeholder="https://...">
+      </div>
+
+      <div class="flex items-center justify-between gap-4">
+        <label class="inline-flex items-center gap-2 text-sm text-slate-300">
+          <input type="checkbox" class="h-4 w-4 accent-sky-400" formControlName="isActive">
+          Activo
+        </label>
+
+        <div class="flex gap-2">
+          <button type="button" class="btn-ghost" (click)="closeModal()" [disabled]="saving">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="saving || form.invalid">
+            <span *ngIf="!saving">Guardar</span>
+            <span *ngIf="saving">Guardando…</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

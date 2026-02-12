@@ -1,0 +1,15 @@
+<div class="min-h-screen bg-slate-950 text-slate-100">
+  <div class="mx-auto max-w-6xl px-6 py-6">
+    <div class="flex items-center justify-between gap-3">
+      <a routerLink="/app/clients" class="text-lg font-semibold tracking-tight">Pagina Web</a>
+      <nav class="flex items-center gap-4 text-sm">
+        <a routerLink="/app/clients" routerLinkActive="text-white" class="text-slate-300 hover:text-white">Clientes</a>
+        <a routerLink="/app/products" routerLinkActive="text-white" class="text-slate-300 hover:text-white">Productos</a>
+      </nav>
+    </div>
+
+    <div class="mt-6">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

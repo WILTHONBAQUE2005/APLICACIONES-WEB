@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaginaWeb.Core", "src\PaginaWeb.Core\PaginaWeb.Core.csproj", "{A0D5B2B0-0F63-4DFE-9A8B-9D16D3DFE0C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaginaWeb.Infrastructure", "src\PaginaWeb.Infrastructure\PaginaWeb.Infrastructure.csproj", "{B84B54AD-0B5D-4E0D-B902-DFE7F7A7873B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaginaWeb.Api", "src\PaginaWeb.Api\PaginaWeb.Api.csproj", "{1A30D9E4-4F6E-4E9A-9F43-184C8B1D0E1E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0D5B2B0-0F63-4DFE-9A8B-9D16D3DFE0C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0D5B2B0-0F63-4DFE-9A8B-9D16D3DFE0C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0D5B2B0-0F63-4DFE-9A8B-9D16D3DFE0C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0D5B2B0-0F63-4DFE-9A8B-9D16D3DFE0C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84B54AD-0B5D-4E0D-B902-DFE7F7A7873B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84B54AD-0B5D-4E0D-B902-DFE7F7A7873B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84B54AD-0B5D-4E0D-B902-DFE7F7A7873B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84B54AD-0B5D-4E0D-B902-DFE7F7A7873B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A30D9E4-4F6E-4E9A-9F43-184C8B1D0E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A30D9E4-4F6E-4E9A-9F43-184C8B1D0E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A30D9E4-4F6E-4E9A-9F43-184C8B1D0E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A30D9E4-4F6E-4E9A-9F43-184C8B1D0E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
