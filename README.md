@@ -1,8 +1,5 @@
-Aquí tienes un README.md simple, claro y “como si lo hicieras tú”. Copia y pega tal cual.
-
-# Semana 5 y 6 – Página Web (Angular + .NET + MySQL/MariaDB)
-
-Proyecto académico: sistema web con login (cookies) y CRUD de **Clientes** y **Productos**.
+# Semana 5 y 6 – Página Web
+Sistema web con login (cookies) y CRUD de **Clientes** y **Productos**.
 
 ---
 
