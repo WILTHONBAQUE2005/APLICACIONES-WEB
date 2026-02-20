@@ -1,0 +1,27 @@
+@NetCoreApi_HostAddress = http://localhost:0
+
+GET {{NetCoreApi_HostAddress}}/api/todoitems
+Accept: application/json
+
+###
+
+POST {{NetCoreApi_HostAddress}}/api/todoitems
+Content-Type: application/json
+
+{
+  "title": "Aprender EF Core"
+}
+
+###
+
+PUT {{NetCoreApi_HostAddress}}/api/todoitems/1
+Content-Type: application/json
+
+{
+  "title": "Aprender EF Core (actualizado)",
+  "isDone": true
+}
+
+###
+
+DELETE {{NetCoreApi_HostAddress}}/api/todoitems/1

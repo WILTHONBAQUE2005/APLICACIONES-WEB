@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Factura</title>
+  <link rel="stylesheet" href="/css/factura.css" />
+</head>
+<body>
+  <header class="topbar no-print">
+    <div class="container topbar__inner">
+      <div class="brand">
+        <div class="brand__mark" aria-hidden="true">F</div>
+        <div class="brand__text">
+          <div class="brand__title">Factura</div>
+          <div class="brand__subtitle">Reporte listo para impresión</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnDemo" class="btn btn--primary" type="button">Cargar demo</button>
+        <button id="btnBuscar" class="btn" type="button">Buscar por ID</button>
+        <button id="btnPrint" class="btn btn--ghost" type="button">Imprimir / Guardar PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel no-print">
+      <div class="grid">
+        <label class="field">
+          <span class="field__label">Cliente</span>
+          <select id="clienteSelect" class="field__control">
+            <option value="">Cargando…</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field__label">ID de factura</span>
+          <input id="facturaId" class="field__control" type="number" min="1" value="1" />
+        </label>
+
+        <div class="hint">
+          <div class="hint__title">Tip</div>
+          <div class="hint__text">Usa “Cargar demo” para generar un ejemplo rápido y luego imprime.</div>
+        </div>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <section id="factura" class="invoice" aria-label="Factura">
+      <div class="invoice__header">
+        <div class="invoice__company">
+          <div class="invoice__company-name" id="empresaNombre">—</div>
+          <div class="invoice__company-meta">
+            <div id="empresaDireccion">—</div>
+            <div>
+              <span id="empresaTelefono">—</span>
+              <span class="sep">·</span>
+              <span id="empresaEmail">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="invoice__meta">
+          <div class="meta-card">
+            <div class="meta-card__row">
+              <span class="meta-card__label">N°</span>
+              <span class="meta-card__value" id="facturaNumero">—</span>
+            </div>
+            <div class="meta-card__row">
+              <span class="meta-card__label">Fecha</span>
+              <span class="meta-card__value" id="facturaFecha">—</span>
+            </div>
+            <div class="meta-card__row">
+              <span class="meta-card__label">Pago</span>
+              <span class="meta-card__value" id="facturaPago">—</span>
+            </div>
+            <div class="meta-card__row">
+              <span class="meta-card__label">Moneda</span>
+              <span class="meta-card__value" id="facturaMoneda">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice__billto">
+        <div class="billto">
+          <div class="billto__label">Facturar a</div>
+          <div class="billto__name" id="clienteNombre">—</div>
+          <div class="billto__meta">
+            <div id="clienteDireccion">—</div>
+            <div>
+              <span id="clienteTelefono">—</span>
+              <span class="sep">·</span>
+              <span id="clienteEmail">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice__table">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 52%;">Descripción</th>
+              <th style="width: 12%;" class="right">Cant.</th>
+              <th style="width: 18%;" class="right">P. unitario</th>
+              <th style="width: 18%;" class="right">Importe</th>
+            </tr>
+          </thead>
+          <tbody id="detalleBody">
+            <tr><td colspan="4" class="muted">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="invoice__footer">
+        <div class="notes">
+          <div class="notes__label">Observaciones</div>
+          <div id="facturaObs" class="notes__text">—</div>
+        </div>
+
+        <div class="totals">
+          <div class="totals__row">
+            <span class="totals__label">Subtotal</span>
+            <span class="totals__value" id="subtotal">—</span>
+          </div>
+          <div class="totals__row">
+            <span class="totals__label">Impuesto</span>
+            <span class="totals__value" id="impuesto">—</span>
+          </div>
+          <div class="totals__row totals__row--grand">
+            <span class="totals__label">Total</span>
+            <span class="totals__value" id="total">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice__signature">
+        <div class="sig">
+          <div class="sig__line"></div>
+          <div class="sig__label">Recibí conforme</div>
+        </div>
+        <div class="sig">
+          <div class="sig__line"></div>
+          <div class="sig__label">Entregué conforme</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/factura.js"></script>
+</body>
+</html>

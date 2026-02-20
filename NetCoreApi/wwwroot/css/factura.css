@@ -1,0 +1,248 @@
+:root{
+  --bg:#0b1020;
+  --card:#111a33;
+  --muted:#9aa7c7;
+  --text:#eef2ff;
+  --line:rgba(255,255,255,.10);
+  --white:#ffffff;
+  --ink:#0f172a;
+  --paper:#ffffff;
+  --soft:#f6f7fb;
+  --accent:#4f7cff;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  background: radial-gradient(1000px 600px at 10% -10%, rgba(79,124,255,.30), transparent 60%),
+              radial-gradient(900px 600px at 90% 0%, rgba(34,211,238,.18), transparent 55%),
+              var(--bg);
+  color:var(--text);
+}
+
+.container{ width:min(1100px, 92vw); margin:0 auto; }
+.topbar{
+  position:sticky; top:0; z-index:10;
+  backdrop-filter: blur(10px);
+  background: rgba(11,16,32,.70);
+  border-bottom:1px solid var(--line);
+}
+.topbar__inner{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 0;
+}
+.brand{ display:flex; align-items:center; gap:12px; }
+.brand__mark{
+  width:40px; height:40px; border-radius:12px;
+  display:grid; place-items:center;
+  background:linear-gradient(135deg, rgba(79,124,255,.95), rgba(34,211,238,.85));
+  color:#06102a; font-weight:800;
+}
+.brand__title{ font-weight:800; letter-spacing:.2px; }
+.brand__subtitle{ color:var(--muted); font-size:13px; margin-top:2px; }
+
+.actions{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+.btn{
+  border:1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+}
+.btn:hover{ background: rgba(255,255,255,.10); }
+.btn--primary{
+  background: rgba(79,124,255,.22);
+  border-color: rgba(79,124,255,.45);
+}
+.btn--primary:hover{ background: rgba(79,124,255,.30); }
+.btn--ghost{
+  background: transparent;
+}
+
+.panel{
+  margin:18px 0 18px;
+  border:1px solid var(--line);
+  background: rgba(255,255,255,.04);
+  border-radius:18px;
+  padding:14px;
+}
+.grid{
+  display:grid;
+  grid-template-columns: 1.2fr .6fr 1fr;
+  gap:12px;
+  align-items:end;
+}
+.field{ display:flex; flex-direction:column; gap:6px; }
+.field__label{ color:var(--muted); font-size:12px; }
+.field__control{
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  color:var(--text);
+  outline:none;
+}
+.field__control:focus{ border-color: rgba(79,124,255,.65); }
+
+.hint{
+  border:1px dashed rgba(255,255,255,.22);
+  border-radius:14px;
+  padding:10px 12px;
+  color:var(--muted);
+  font-size:13px;
+}
+.hint__title{ color:var(--text); font-weight:700; font-size:12px; margin-bottom:4px; }
+.status{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:13px;
+  min-height: 18px;
+}
+
+/* Invoice (paper) */
+.invoice{
+  background: var(--paper);
+  color: var(--ink);
+  border-radius:22px;
+  box-shadow: 0 22px 60px rgba(0,0,0,.35);
+  overflow:hidden;
+  border:1px solid rgba(15,23,42,.10);
+}
+.invoice__header{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  padding:22px 22px 10px;
+}
+.invoice__company-name{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+.invoice__company-meta{
+  margin-top:6px;
+  color: rgba(15,23,42,.70);
+  font-size:13px;
+  line-height:1.4;
+}
+.sep{ padding:0 8px; color: rgba(15,23,42,.35); }
+
+.meta-card{
+  background: var(--soft);
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:16px;
+  padding:12px 14px;
+  min-width: 240px;
+}
+.meta-card__row{
+  display:flex; justify-content:space-between; gap:12px;
+  padding:6px 0;
+  border-bottom:1px dashed rgba(15,23,42,.10);
+}
+.meta-card__row:last-child{ border-bottom:0; }
+.meta-card__label{ color: rgba(15,23,42,.60); font-size:12px; font-weight:700; }
+.meta-card__value{ font-weight:800; }
+
+.invoice__billto{
+  padding: 0 22px 16px;
+}
+.billto{
+  border-top:1px solid rgba(15,23,42,.10);
+  padding-top:14px;
+}
+.billto__label{
+  color: rgba(15,23,42,.60);
+  font-size:12px; font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.billto__name{ margin-top:6px; font-weight:900; font-size:16px; }
+.billto__meta{ margin-top:4px; color: rgba(15,23,42,.70); font-size:13px; line-height:1.4; }
+
+.invoice__table{
+  padding: 0 22px;
+}
+table{ width:100%; border-collapse:collapse; }
+thead th{
+  text-align:left;
+  padding:12px 10px;
+  font-size:12px;
+  color: rgba(15,23,42,.60);
+  border-bottom:1px solid rgba(15,23,42,.12);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+tbody td{
+  padding:12px 10px;
+  border-bottom:1px solid rgba(15,23,42,.08);
+  vertical-align:top;
+}
+.right{ text-align:right; }
+.muted{ color: rgba(15,23,42,.55); }
+
+.invoice__footer{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  padding: 16px 22px 22px;
+}
+.notes{
+  flex: 1 1 auto;
+}
+.notes__label{
+  color: rgba(15,23,42,.60);
+  font-size:12px; font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.notes__text{ margin-top:6px; color: rgba(15,23,42,.80); font-size:13px; line-height:1.5; }
+
+.totals{
+  width: min(360px, 45%);
+  background: var(--soft);
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:16px;
+  padding:12px 14px;
+}
+.totals__row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 0;
+  border-bottom:1px dashed rgba(15,23,42,.10);
+}
+.totals__row:last-child{ border-bottom:0; }
+.totals__label{ color: rgba(15,23,42,.65); font-weight:700; }
+.totals__value{ font-weight:900; }
+.totals__row--grand .totals__label,
+.totals__row--grand .totals__value{ font-size:16px; }
+
+.invoice__signature{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding: 0 22px 24px;
+}
+.sig{ width: 48%; text-align:center; }
+.sig__line{
+  height:1px;
+  background: rgba(15,23,42,.25);
+  margin: 26px 0 8px;
+}
+.sig__label{ color: rgba(15,23,42,.60); font-size:12px; font-weight:700; }
+
+.no-print{ }
+@media print{
+  body{ background:#fff; }
+  .no-print{ display:none !important; }
+  .invoice{
+    box-shadow:none;
+    border:0;
+    border-radius:0;
+  }
+  .container{ width:100%; margin:0; }
+}
