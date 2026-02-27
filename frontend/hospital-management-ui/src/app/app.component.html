@@ -1,0 +1,261 @@
+<main class="contenedor-principal">
+  <header class="encabezado">
+    <div>
+      <p class="etiqueta">Evaluacion Parcial 2</p>
+      <h1>Sistema de Gestion de Hospitales</h1>
+      <p class="subtitulo">Administracion de pacientes, doctores y citas medicas.</p>
+    </div>
+    <span class="estado" *ngIf="cargando">Cargando datos...</span>
+  </header>
+
+  <section class="panel panel-resumen">
+    <article class="resumen-card">
+      <span class="resumen-titulo">Pacientes</span>
+      <strong>{{ totalPacientes }}</strong>
+    </article>
+    <article class="resumen-card">
+      <span class="resumen-titulo">Doctores</span>
+      <strong>{{ totalDoctores }}</strong>
+    </article>
+    <article class="resumen-card">
+      <span class="resumen-titulo">Citas</span>
+      <strong>{{ totalCitas }}</strong>
+    </article>
+  </section>
+
+  <section class="alerta exito" *ngIf="mensajeExito">
+    {{ mensajeExito }}
+  </section>
+
+  <section class="alerta error" *ngIf="mensajeError">
+    {{ mensajeError }}
+  </section>
+
+  <section class="grid-principal">
+    <article class="panel">
+      <div class="panel-header">
+        <h2>Pacientes</h2>
+        <span class="badge">CRUD</span>
+      </div>
+
+      <form [formGroup]="pacienteForm" (ngSubmit)="onGuardarPaciente()" class="formulario">
+        <div class="campo">
+          <label for="pacienteNombre">Nombre</label>
+          <input id="pacienteNombre" type="text" formControlName="nombre">
+        </div>
+
+        <div class="campo">
+          <label for="pacienteApellido">Apellido</label>
+          <input id="pacienteApellido" type="text" formControlName="apellido">
+        </div>
+
+        <div class="campo">
+          <label for="pacienteFechaNacimiento">Fecha de nacimiento</label>
+          <input id="pacienteFechaNacimiento" type="date" formControlName="fechaNacimiento">
+        </div>
+
+        <div class="campo">
+          <label for="pacienteTelefono">Telefono</label>
+          <input id="pacienteTelefono" type="text" formControlName="telefono">
+        </div>
+
+        <div class="acciones-formulario">
+          <button type="submit" class="btn btn-primario">
+            {{ pacienteEditandoId ? 'Actualizar' : 'Guardar' }}
+          </button>
+          <button *ngIf="pacienteEditandoId" type="button" class="btn btn-secundario" (click)="onCancelarEdicionPaciente()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+
+      <div class="tabla-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Fecha nac.</th>
+              <th>Telefono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let paciente of pacientes">
+              <td>{{ paciente.pacienteId }}</td>
+              <td>{{ paciente.nombre }} {{ paciente.apellido }}</td>
+              <td>{{ paciente.fechaNacimiento | date:'yyyy-MM-dd' }}</td>
+              <td>{{ paciente.telefono }}</td>
+              <td class="acciones-tabla">
+                <button type="button" class="btn btn-secundario" (click)="onEditarPaciente(paciente)">Editar</button>
+                <button type="button" class="btn btn-peligro" (click)="onEliminarPaciente(paciente.pacienteId)">Eliminar</button>
+              </td>
+            </tr>
+            <tr *ngIf="pacientes.length === 0">
+              <td colspan="5" class="sin-registros">No hay pacientes registrados.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-header">
+        <h2>Doctores</h2>
+        <span class="badge">CRUD</span>
+      </div>
+
+      <form [formGroup]="doctorForm" (ngSubmit)="onGuardarDoctor()" class="formulario">
+        <div class="campo">
+          <label for="doctorNombre">Nombre</label>
+          <input id="doctorNombre" type="text" formControlName="nombre">
+        </div>
+
+        <div class="campo">
+          <label for="doctorApellido">Apellido</label>
+          <input id="doctorApellido" type="text" formControlName="apellido">
+        </div>
+
+        <div class="campo">
+          <label for="doctorEspecialidad">Especialidad</label>
+          <input id="doctorEspecialidad" type="text" formControlName="especialidad">
+        </div>
+
+        <div class="campo">
+          <label for="doctorTelefono">Telefono</label>
+          <input id="doctorTelefono" type="text" formControlName="telefono">
+        </div>
+
+        <div class="acciones-formulario">
+          <button type="submit" class="btn btn-primario">
+            {{ doctorEditandoId ? 'Actualizar' : 'Guardar' }}
+          </button>
+          <button *ngIf="doctorEditandoId" type="button" class="btn btn-secundario" (click)="onCancelarEdicionDoctor()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+
+      <div class="tabla-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Especialidad</th>
+              <th>Telefono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doctor of doctores">
+              <td>{{ doctor.doctorId }}</td>
+              <td>{{ doctor.nombre }} {{ doctor.apellido }}</td>
+              <td>{{ doctor.especialidad }}</td>
+              <td>{{ doctor.telefono }}</td>
+              <td class="acciones-tabla">
+                <button type="button" class="btn btn-secundario" (click)="onEditarDoctor(doctor)">Editar</button>
+                <button type="button" class="btn btn-peligro" (click)="onEliminarDoctor(doctor.doctorId)">Eliminar</button>
+              </td>
+            </tr>
+            <tr *ngIf="doctores.length === 0">
+              <td colspan="5" class="sin-registros">No hay doctores registrados.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <section class="panel panel-citas">
+    <div class="panel-header">
+      <h2>Citas medicas</h2>
+      <span class="badge">Relacionadas</span>
+    </div>
+
+    <form [formGroup]="citaForm" (ngSubmit)="onGuardarCita()" class="formulario formulario-citas">
+      <div class="campo">
+        <label for="citaPaciente">Paciente</label>
+        <select id="citaPaciente" formControlName="pacienteId">
+          <option [ngValue]="0">Seleccione un paciente</option>
+          <option *ngFor="let paciente of pacientes" [ngValue]="paciente.pacienteId">
+            {{ paciente.nombre }} {{ paciente.apellido }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="citaDoctor">Doctor</label>
+        <select id="citaDoctor" formControlName="doctorId">
+          <option [ngValue]="0">Seleccione un doctor</option>
+          <option *ngFor="let doctor of doctores" [ngValue]="doctor.doctorId">
+            {{ doctor.nombre }} {{ doctor.apellido }} - {{ doctor.especialidad }}
+          </option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="citaFechaHora">Fecha y hora</label>
+        <input id="citaFechaHora" type="datetime-local" formControlName="fechaHora">
+      </div>
+
+      <div class="campo campo-amplio">
+        <label for="citaMotivo">Motivo</label>
+        <input id="citaMotivo" type="text" formControlName="motivo">
+      </div>
+
+      <div class="campo">
+        <label for="citaEstado">Estado</label>
+        <select id="citaEstado" formControlName="estado">
+          <option value="Programada">Programada</option>
+          <option value="Completada">Completada</option>
+          <option value="Cancelada">Cancelada</option>
+        </select>
+      </div>
+
+      <div class="acciones-formulario acciones-formulario-citas">
+        <button type="submit" class="btn btn-primario" [disabled]="pacientes.length === 0 || doctores.length === 0">
+          {{ citaEditandoId ? 'Actualizar' : 'Guardar' }}
+        </button>
+        <button *ngIf="citaEditandoId" type="button" class="btn btn-secundario" (click)="onCancelarEdicionCita()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+
+    <div class="tabla-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Paciente</th>
+            <th>Doctor</th>
+            <th>Especialidad</th>
+            <th>Fecha y hora</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cita of citasMedicas">
+            <td>{{ cita.citaId }}</td>
+            <td>{{ cita.pacienteNombreCompleto }}</td>
+            <td>{{ cita.doctorNombreCompleto }}</td>
+            <td>{{ cita.especialidadDoctor }}</td>
+            <td>{{ cita.fechaHora | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ cita.motivo }}</td>
+            <td>{{ cita.estado }}</td>
+            <td class="acciones-tabla">
+              <button type="button" class="btn btn-secundario" (click)="onEditarCita(cita)">Editar</button>
+              <button type="button" class="btn btn-peligro" (click)="onEliminarCita(cita.citaId)">Eliminar</button>
+            </td>
+          </tr>
+          <tr *ngIf="citasMedicas.length === 0">
+            <td colspan="8" class="sin-registros">No hay citas medicas registradas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>

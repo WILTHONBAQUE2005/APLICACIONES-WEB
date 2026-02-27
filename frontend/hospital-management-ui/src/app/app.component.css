@@ -1,0 +1,288 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.contenedor-principal {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.encabezado h1 {
+  margin: 4px 0;
+  font-size: 2rem;
+}
+
+.etiqueta {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #4b6cb7;
+}
+
+.subtitulo {
+  margin: 0;
+  color: #607086;
+}
+
+.estado {
+  padding: 10px 14px;
+  background: #eef4ff;
+  border-radius: 999px;
+  color: #3558a8;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.grid-principal {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(28, 38, 54, 0.08);
+  overflow: hidden;
+}
+
+.panel-citas {
+  margin-bottom: 24px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #edf2ff;
+  color: #364fc7;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.panel-resumen {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.resumen-card {
+  padding: 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f8faff 0%, #eef3ff 100%);
+  border: 1px solid #e2e9ff;
+}
+
+.resumen-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.8rem;
+}
+
+.resumen-titulo {
+  color: #53657d;
+  font-weight: 700;
+}
+
+.alerta {
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.alerta.exito {
+  background: #ebfbee;
+  color: #2b8a3e;
+  border: 1px solid #b2f2bb;
+}
+
+.alerta.error {
+  background: #fff5f5;
+  color: #c92a2a;
+  border: 1px solid #ffc9c9;
+}
+
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.formulario-citas {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo-amplio {
+  grid-column: span 2;
+}
+
+.campo label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #44556b;
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d7deea;
+  border-radius: 10px;
+  background: #ffffff;
+  outline: none;
+}
+
+.campo input:focus,
+.campo select:focus {
+  border-color: #4b6cb7;
+  box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.12);
+}
+
+.acciones-formulario {
+  grid-column: span 2;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.acciones-formulario-citas {
+  grid-column: span 3;
+}
+
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.btn-primario {
+  background: #3457d5;
+  color: #ffffff;
+}
+
+.btn-secundario {
+  background: #edf2ff;
+  color: #2f4d9b;
+}
+
+.btn-peligro {
+  background: #fff5f5;
+  color: #c92a2a;
+}
+
+.tabla-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+th,
+td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #edf1f7;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.94rem;
+}
+
+th {
+  background: #f8fafc;
+  color: #44556b;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.acciones-tabla {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sin-registros {
+  text-align: center;
+  color: #6b7c93;
+  font-style: italic;
+}
+
+@media (max-width: 1100px) {
+  .grid-principal,
+  .panel-resumen,
+  .formulario,
+  .formulario-citas {
+    grid-template-columns: 1fr;
+  }
+
+  .campo-amplio,
+  .acciones-formulario,
+  .acciones-formulario-citas {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .contenedor-principal {
+    padding: 16px;
+  }
+
+  .encabezado {
+    flex-direction: column;
+  }
+
+  .encabezado h1 {
+    font-size: 1.6rem;
+  }
+}

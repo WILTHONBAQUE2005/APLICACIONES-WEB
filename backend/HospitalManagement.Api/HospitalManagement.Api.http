@@ -1,0 +1,14 @@
+@HospitalManagement_Api_HostAddress = http://localhost:5262
+
+GET {{HospitalManagement_Api_HostAddress}}/api/pacientes
+Accept: application/json
+
+###
+
+GET {{HospitalManagement_Api_HostAddress}}/api/doctores
+Accept: application/json
+
+###
+
+GET {{HospitalManagement_Api_HostAddress}}/api/citasmedicas
+Accept: application/json
